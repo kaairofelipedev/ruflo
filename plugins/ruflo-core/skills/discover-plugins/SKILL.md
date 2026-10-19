@@ -85,6 +85,7 @@ When starting a new project, exploring ruflo capabilities, or wondering which pl
 | **ruflo-iot-cognitum** | Cognitum Seed hardware device management | 5-tier device trust, telemetry anomaly detection (Z-score), fleet firmware rollouts, witness chain verification, SONA + AgentDB integration |
 | **ruflo-neural-trader** | Trading strategy development and backtesting | Z-score market anomalies, SONA trajectory strategies, walk-forward backtesting, portfolio optimization |
 | **ruflo-market-data** | Market data ingestion and pattern matching | OHLCV vectorization, candlestick pattern detection, HNSW-indexed historical search |
+| **ruflo-kalainne** | Pedidos da Kalainne Professional | Roteamento dos 13 agentes, namespaces de memória e travas de publicação, gasto, envio e merge |
 
 ## Decision Guide
 
@@ -105,6 +106,7 @@ When starting a new project, exploring ruflo capabilities, or wondering which pl
 - Scaffold domain models → `ruflo-ddd`
 - Follow SPARC methodology → `ruflo-sparc`
 - Develop trading strategies → `ruflo-neural-trader` + `ruflo-market-data`
+- Operar a Kalainne (marca, PMO, código, CRM) → `ruflo-kalainne` + `ruflo-core` + `ruflo-agentdb`
 - Work with vector embeddings → `ruflo-ruvector`
 - Build knowledge graphs → `ruflo-knowledge-graph`
 - Manage database migrations → `ruflo-migrations`
