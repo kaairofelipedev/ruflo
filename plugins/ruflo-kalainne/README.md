@@ -38,6 +38,17 @@ Cada registro aponta para a página do Notion, a data e a trava aplicada. Não e
 
 Para tratar a stack Hermes como existente: `KALAINNE_HERMES_CONFIRMED=1`.
 
+## Desktop, Cursor e nuvem
+
+O instalador grava o perfil dentro do projeto. Não altera PATH, MCP nem hooks globais.
+
+```bash
+node plugins/ruflo-kalainne/scripts/install.mjs --target "<projeto>" --repo "<checkout-deste-ruflo>" --surface all
+node plugins/ruflo-kalainne/scripts/desktop-commands.mjs --platform win32 --repo "<checkout-deste-ruflo>"
+```
+
+No próprio checkout, `--target` e `--repo` apontam para a raiz. A regra fica em `.cursor/rules/kalainne.mdc` e vale para o Cursor local e para o Cursor Cloud. Claude Code e Codex recebem fragmentos em `.kalainne/` para colar no projeto.
+
 ## Verificação
 
 ```bash

@@ -44,5 +44,12 @@ else
   bad "node --test falhou"
 fi
 
+step "5. instalador local e nuvem"
+if node --test "$ROOT/scripts/install.test.mjs"; then
+  ok
+else
+  bad "install.test falhou"
+fi
+
 printf "\n%d passed, %d failed\n" "$PASS" "$FAIL"
 [[ "$FAIL" -eq 0 ]]

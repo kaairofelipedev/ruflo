@@ -1,0 +1,16 @@
+---
+description: Roteia pedidos da Kalainne pelo harness Ruflo antes de executar no desktop ou na nuvem.
+alwaysApply: true
+---
+
+# Kalainne no Ruflo
+
+Pedido da Kalainne, do Kairo, de marca, de PMO ou deste plugin: rode o roteador e siga o JSON.
+
+```bash
+node plugins/ruflo-kalainne/scripts/route.mjs --json "<pedido>"
+```
+
+Obedeça `owners`, `reviewers`, `gates`, `blocked` e `memory`. Não publique, não gaste, não envie mensagem externa e não faça merge. O Notion prevalece sobre a memória.
+
+Pedido de engenharia do próprio Ruflo que não cita a Kalainne não desvia o trabalho.
