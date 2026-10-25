@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { commandsFor } from "./desktop-commands.mjs";
-import { installProfile } from "./install.mjs";
+import { installProfile, targetBlockReason } from "./install.mjs";
 
 test("comandos Windows não mexem no ambiente global", () => {
   const commands = commandsFor("win32", "D:\\Ruflo");
@@ -13,6 +13,8 @@ test("comandos Windows não mexem no ambiente global", () => {
   assert.match(commands.claude, /ruflo-kalainne/);
   assert.match(commands.install, /--surface all/);
   assert.match(commands.note, /não alteram PATH/i);
+  const spaced = commandsFor("win32", "D:\\Agent Sandboxes\\ruflo");
+  assert.match(spaced.route, /node "D:\\Agent Sandboxes\\ruflo\\plugins\\ruflo-kalainne\\scripts\\route\.mjs"/);
   for (const value of Object.values(commands)) {
     assert.equal(String(value).includes("export PATH"), false);
     assert.equal(String(value).includes(".cursor\\mcp"), false);
@@ -66,8 +68,22 @@ test("instalação no próprio checkout usa caminho relativo", () => {
   const profile = JSON.parse(fs.readFileSync(path.join(target, ".kalainne/profile.json"), "utf8"));
   assert.equal(profile.repoRoot, ".");
   const rule = fs.readFileSync(path.join(target, ".cursor/rules/kalainne.mdc"), "utf8");
-  assert.match(rule, /node plugins\/ruflo-kalainne\/scripts\/route\.mjs/);
+  assert.match(rule, /node "plugins\/ruflo-kalainne\/scripts\/route\.mjs"/);
   assert.equal(rule.includes(target), false);
+});
+
+test("desktop Windows recusa raiz e pastas de sistema", () => {
+  assert.equal(targetBlockReason("C:\\"), "raiz");
+  assert.equal(targetBlockReason("C:\\Windows"), "sistema");
+  assert.equal(targetBlockReason("C:\\Program Files"), "sistema");
+  assert.equal(targetBlockReason("D:\\Agent Sandboxes\\ruflo"), null);
+});
+
+test("caminho com espaço vai entre aspas na regra", () => {
+  const target = fs.mkdtempSync(path.join(os.tmpdir(), "kalainne-profile-"));
+  installProfile({ targetDir: target, repoRoot: "/opt/Agent Sandboxes/ruflo", surfaces: ["cursor"] });
+  const rule = fs.readFileSync(path.join(target, ".cursor/rules/kalainne.mdc"), "utf8");
+  assert.match(rule, /node "\/opt\/Agent Sandboxes\/ruflo\/plugins\/ruflo-kalainne\/scripts\/route\.mjs"/);
 });
 
 test("superfície claude não grava a regra do Cursor", () => {

@@ -25,14 +25,32 @@ function normalizeSurfaces(surfaces) {
   return [...list];
 }
 
-function assertSafeTarget(target) {
-  const root = path.parse(target).root;
-  if (target === root) throw new Error("Recusa instalar na raiz do sistema.");
+function pathApi(target) {
+  return /^[A-Za-z]:[\\/]/.test(target) || String(target).includes("\\") ? path.win32 : path;
+}
+
+export function targetBlockReason(target) {
+  const root = pathApi(target).parse(target).root;
+  const trimmed = target.replace(/[\\/]+$/, "");
+  const rootTrimmed = root.replace(/[\\/]+$/, "");
+  if (target === root || trimmed === rootTrimmed || trimmed === "") return "raiz";
   const portable = target.replace(/\\/g, "/").replace(/\/$/, "");
-  if (SYSTEM_DIRS.has(portable)) throw new Error("Recusa instalar em diretório de sistema.");
+  const withoutDrive = portable.replace(/^[A-Za-z]:/, "");
+  if (SYSTEM_DIRS.has(portable) || SYSTEM_DIRS.has(withoutDrive)) return "sistema";
+  return null;
+}
+
+function assertSafeTarget(target) {
+  const reason = targetBlockReason(target);
+  if (reason === "raiz") throw new Error("Recusa instalar na raiz do sistema.");
+  if (reason === "sistema") throw new Error("Recusa instalar em diretório de sistema.");
   if (!fs.existsSync(target) || !fs.statSync(target).isDirectory()) {
     throw new Error("O alvo precisa ser um diretório existente.");
   }
+}
+
+function quoted(value) {
+  return `"${String(value).replace(/"/g, "")}"`;
 }
 
 function routerDisplay(repoRoot, sameCheckout) {
@@ -51,7 +69,7 @@ alwaysApply: true
 Pedido da Kalainne, do Kairo, de marca, de PMO ou deste plugin: rode o roteador e siga o JSON.
 
 \`\`\`bash
-node ${router} --json "<pedido>"
+node ${quoted(router)} --json "<pedido>"
 \`\`\`
 
 Obedeça \`owners\`, \`reviewers\`, \`gates\`, \`blocked\` e \`memory\`. Não publique, não gaste, não envie mensagem externa e não faça merge. O Notion prevalece sobre a memória.
@@ -67,7 +85,7 @@ Cole no projeto. Este arquivo não edita configuração global.
 
 \`\`\`bash
 claude --plugin-dir "${repoDisplay}/plugins/ruflo-core" --plugin-dir "${repoDisplay}/plugins/ruflo-agentdb" --plugin-dir "${repoDisplay}/plugins/ruflo-kalainne"
-node ${router} --json "<pedido>"
+node ${quoted(router)} --json "<pedido>"
 \`\`\`
 `;
 }
@@ -77,7 +95,7 @@ function codexFragment(router) {
 
 Cole no AGENTS.md do projeto. Este arquivo não edita configuração global.
 
-Antes de um pedido da Kalainne, rode \`node ${router} --json "<pedido>"\` e siga dono, revisor e travas. O Notion prevalece sobre a memória.
+Antes de um pedido da Kalainne, rode \`node ${quoted(router)} --json "<pedido>"\` e siga dono, revisor e travas. O Notion prevalece sobre a memória.
 `;
 }
 
@@ -87,7 +105,7 @@ function cloudNote(router) {
 O Cursor Cloud lê \`.cursor/rules/kalainne.mdc\` deste projeto. Claude Code e Codex na nuvem usam o mesmo roteador:
 
 \`\`\`bash
-node ${router} --json "<pedido>"
+node ${quoted(router)} --json "<pedido>"
 \`\`\`
 
 Não há segundo catálogo de agentes. Publicar, gastar, enviar e fazer merge continuam com aprovação humana.

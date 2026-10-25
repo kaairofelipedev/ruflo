@@ -43,7 +43,8 @@ Nenhum arquivo recebe token, chave ou senha. O modelo MCP não é escrito: cada 
 ## Regras de caminho
 
 - O alvo existe e é diretório.
-- O alvo não é a raiz do sistema nem `/etc`, `/usr`, `/bin`, `/sbin`, `/var`, `/home`, `/Users`, `/Windows` ou `/Program Files`.
+- O alvo não é a raiz do sistema nem `/etc`, `/usr`, `/bin`, `/sbin`, `/var`, `/home`, `/Users`, `/Windows` ou `/Program Files`. No Windows, `C:\`, `C:\Windows` e `C:\Program Files` entram na mesma recusa.
+- O comando do roteador vai entre aspas, para um checkout em pasta com espaço funcionar no desktop.
 - Nenhum arquivo gravado escapa do alvo.
 - Rodar de novo sobrescreve os mesmos caminhos e não cria cópia extra.
 

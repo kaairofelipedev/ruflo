@@ -177,11 +177,19 @@ git commit -m "feat(kalainne): add the local and cloud profile to this fork"
 - Nuvem lendo a mesma regra: Task 3.
 - Canva, Meta Ads e config global: fora do plano, registrados na spec.
 
-## O que só o desktop do Kairo executa
+## Revisão para o desktop (2026-10-25)
+
+O plano permanece válido: perfil dentro do projeto aberto, sem PATH, MCP ou hooks globais. Dois ajustes passaram a fazer parte da implementação, porque o texto anterior quebrava no Windows:
+
+- `C:\`, `C:\Windows` e `C:\Program Files` são recusados mesmo quando o Node que verifica está em Linux.
+- O roteador é chamado entre aspas, inclusive em `D:\Agent Sandboxes\...`.
+
+A execução no checkout aberto é:
 
 ```bash
-node plugins/ruflo-kalainne/scripts/install.mjs --target "D:\caminho\do\projeto" --repo "D:\caminho\deste\ruflo" --surface all
-node plugins/ruflo-kalainne/scripts/desktop-commands.mjs --platform win32 --repo "D:\caminho\deste\ruflo"
+node plugins/ruflo-kalainne/scripts/install.mjs --target . --repo . --surface all
+node plugins/ruflo-kalainne/scripts/route.mjs "abrir PR do site-kalainne"
+node plugins/ruflo-kalainne/scripts/desktop-commands.mjs --platform win32 --repo "D:\Agent Sandboxes\ruflo"
 ```
 
-Esse passo não faz parte do commit. O instalador já estará no repositório.
+O terceiro comando só imprime. Não grava em `D:\`. Outro projeto do desktop recebe o perfil com `--target` apontando para a pasta desse projeto e `--repo` apontando para este checkout.
