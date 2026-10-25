@@ -1,0 +1,20 @@
+{
+  "name": "ruflo-kalainne",
+  "description": "Contrato de integração da Kalainne Professional com o Ruflo: roteamento dos 13 agentes, namespaces de memória, travas de publicação e escolha de runtime local ou nuvem.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Kairo Felipe",
+    "url": "https://github.com/kaairofelipedev"
+  },
+  "homepage": "https://github.com/kaairofelipedev/ruflo",
+  "license": "MIT",
+  "keywords": [
+    "kalainne",
+    "ruflo",
+    "routing",
+    "memory",
+    "governance",
+    "notion",
+    "mcp"
+  ]
+}

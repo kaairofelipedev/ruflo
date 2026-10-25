@@ -139,10 +139,25 @@ const handlers = {
     for (var i = 0; i < dangerous.length; i++) {
       if (cmd.includes(dangerous[i])) {
         console.error('[BLOCKED] Dangerous command detected: ' + dangerous[i]);
+        console.log(JSON.stringify({
+          continue: false,
+          hookSpecificOutput: {
+            hookEventName: 'PreToolUse',
+            permissionDecision: 'deny',
+            permissionDecisionReason: '[BLOCKED] Dangerous command detected: ' + dangerous[i],
+          },
+        }));
         process.exit(1);
       }
     }
-    console.log('[OK] Command validated');
+    console.log(JSON.stringify({
+      continue: true,
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'allow',
+        permissionDecisionReason: '[OK] Command validated',
+      },
+    }));
   },
 
   'post-edit': () => {

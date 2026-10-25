@@ -1,6 +1,6 @@
 # Ruflo Plugins
 
-32 Claude Code plugins for agent-powered development workflows. Load with `--plugin-dir`.
+33 Claude Code plugins for agent-powered development workflows. Load with `--plugin-dir`.
 
 ## Quick Start
 
@@ -75,6 +75,7 @@ claude $(ls -d plugins/ruflo-*/ | sed 's|^|--plugin-dir |' | tr '\n' ' ')
 | [ruflo-iot-cognitum](ruflo-iot-cognitum/) | Cognitum Seed IoT — trust scoring, anomaly detection, fleet management |
 | [ruflo-neural-trader](ruflo-neural-trader/) | [`neural-trader`](https://npmjs.com/package/neural-trader) — 4 agents, LSTM/Transformer, Rust/NAPI backtesting, 112+ MCP tools |
 | [ruflo-market-data](ruflo-market-data/) | Market data ingestion, OHLCV vectorization, pattern matching |
+| [ruflo-kalainne](ruflo-kalainne/) | Kalainne Professional — roteamento dos 13 agentes, memória operacional e travas |
 
 ## Recommended Stacks
 
@@ -87,7 +88,9 @@ claude $(ls -d plugins/ruflo-*/ | sed 's|^|--plugin-dir |' | tr '\n' ' ')
 | Vector search | `ruflo-core` + `ruflo-ruvector` + `ruflo-rag-memory` + `ruflo-knowledge-graph` |
 | IoT development | `ruflo-core` + `ruflo-iot-cognitum` + `ruflo-agentdb` |
 | Trading systems | `ruflo-core` + `ruflo-neural-trader` + `ruflo-market-data` + `ruflo-ruvector` |
-| Full stack | All 32 plugins |
+| Operação Kalainne | `ruflo-core` + `ruflo-agentdb` + `ruflo-rag-memory` + `ruflo-intelligence` + `ruflo-kalainne` |
+| Engenharia Kalainne | `ruflo-kalainne` + `ruflo-swarm` + `ruflo-testgen` + `ruflo-jujutsu` |
+| Full stack | All 33 plugins |
 
 ## npm Package Integration
 

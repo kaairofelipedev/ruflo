@@ -170,6 +170,11 @@
       "name": "ruflo-sparc",
       "source": "./plugins/ruflo-sparc",
       "description": "SPARC methodology — Specification, Pseudocode, Architecture, Refinement, Completion phases with quality gates"
+    },
+    {
+      "name": "ruflo-kalainne",
+      "source": "./plugins/ruflo-kalainne",
+      "description": "Kalainne Professional harness — roteamento dos 13 agentes, memória operacional e travas de publicação, gasto, envio e merge"
     }
   ]
 }

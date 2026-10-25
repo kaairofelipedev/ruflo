@@ -1,0 +1,13 @@
+{
+  "name": "kalainne-ruflo",
+  "version": "0.1.0",
+  "repoRoot": ".",
+  "router": "plugins/ruflo-kalainne/scripts/route.mjs",
+  "surfaces": [
+    "cursor",
+    "claude",
+    "codex",
+    "cloud"
+  ],
+  "globalMutation": false
+}
