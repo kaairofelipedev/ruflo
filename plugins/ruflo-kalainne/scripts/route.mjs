@@ -12,6 +12,7 @@ import {
   RULES,
   SOURCES,
 } from "../catalog/kalainne-catalog.mjs";
+import { isDirectRun } from "./invoked-directly.mjs";
 
 export function normalize(input) {
   return String(input ?? "")
@@ -179,5 +180,4 @@ function main() {
   );
 }
 
-const invokedDirectly = process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\/g, "/"));
-if (invokedDirectly) main();
+if (isDirectRun(import.meta.url)) main();

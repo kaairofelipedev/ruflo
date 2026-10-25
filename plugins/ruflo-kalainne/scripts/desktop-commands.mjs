@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import path from "node:path";
+import { isDirectRun } from "./invoked-directly.mjs";
 
 export function commandsFor(platform, repoRoot) {
   const win = platform === "win32";
@@ -28,5 +29,4 @@ function main() {
   process.stdout.write(`${JSON.stringify(commandsFor(platform, repoRoot), null, 2)}\n`);
 }
 
-const invokedDirectly = process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\/g, "/"));
-if (invokedDirectly) main();
+if (isDirectRun(import.meta.url)) main();

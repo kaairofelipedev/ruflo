@@ -3,7 +3,9 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { pathToFileURL } from "node:url";
 import { commandsFor } from "./desktop-commands.mjs";
+import { isDirectRun } from "./invoked-directly.mjs";
 import { installProfile, targetBlockReason } from "./install.mjs";
 
 test("comandos Windows não mexem no ambiente global", () => {
@@ -19,6 +21,13 @@ test("comandos Windows não mexem no ambiente global", () => {
     assert.equal(String(value).includes("export PATH"), false);
     assert.equal(String(value).includes(".cursor\\mcp"), false);
   }
+});
+
+test("execução direta aceita caminho Windows com espaço", () => {
+  const entry = "D:\\Agent Sandboxes\\CURSOR\\ruflo\\plugins\\ruflo-kalainne\\scripts\\install.mjs";
+  const moduleUrl = pathToFileURL(entry).href;
+  assert.equal(moduleUrl.endsWith(entry.replace(/\\/g, "/")), false);
+  assert.equal(isDirectRun(moduleUrl, entry), true);
 });
 
 test("comandos Unix usam barra normal", () => {

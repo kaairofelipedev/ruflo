@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
+import { isDirectRun } from "./invoked-directly.mjs";
 
 export const SURFACES = ["cursor", "claude", "codex", "cloud"];
 const SYSTEM_DIRS = new Set([
@@ -53,9 +54,17 @@ function quoted(value) {
   return `"${String(value).replace(/"/g, "")}"`;
 }
 
-function routerDisplay(repoRoot, sameCheckout) {
+function displayRepo(repoRoot) {
+  const raw = String(repoRoot).replace(/\\/g, "/");
+  if (process.platform === "win32" && raw.startsWith("/") && !raw.startsWith("//")) {
+    return raw.replace(/\/$/, "");
+  }
+  return path.resolve(repoRoot).split(path.sep).join("/");
+}
+
+function routerDisplay(repoDisplay, sameCheckout) {
   if (sameCheckout) return "plugins/ruflo-kalainne/scripts/route.mjs";
-  return path.join(repoRoot, "plugins", "ruflo-kalainne", "scripts", "route.mjs").split(path.sep).join("/");
+  return `${repoDisplay}/plugins/ruflo-kalainne/scripts/route.mjs`;
 }
 
 function cursorRule(router) {
@@ -119,8 +128,8 @@ export function installProfile({ targetDir, repoRoot, surfaces = ["all"] }) {
   assertSafeTarget(target);
   const selected = normalizeSurfaces(surfaces);
   const sameCheckout = target === repo;
-  const storedRoot = sameCheckout ? "." : repo.split(path.sep).join("/");
-  const router = routerDisplay(sameCheckout ? repo : repo, sameCheckout);
+  const storedRoot = sameCheckout ? "." : displayRepo(repoRoot);
+  const router = routerDisplay(storedRoot, sameCheckout);
   const repoDisplay = sameCheckout ? "." : storedRoot;
   const written = [];
 
@@ -170,5 +179,4 @@ function main() {
   process.stdout.write(`${result.written.join("\n")}\n`);
 }
 
-const invokedDirectly = process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\/g, "/"));
-if (invokedDirectly) main();
+if (isDirectRun(import.meta.url)) main();
